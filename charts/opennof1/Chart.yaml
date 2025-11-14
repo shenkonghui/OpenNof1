@@ -1,0 +1,17 @@
+apiVersion: v2
+name: opennof1
+description: AI-powered autonomous trading system with intelligent agents
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+keywords:
+  - trading
+  - ai
+  - cryptocurrency
+  - bot
+home: https://github.com/wfnuser/OpenNof1
+sources:
+  - https://github.com/wfnuser/OpenNof1
+maintainers:
+  - name: OpenNof1 Team
+    email: contact@opennof1.com

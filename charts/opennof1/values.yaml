@@ -1,0 +1,105 @@
+# 默认配置值
+replicaCount: 1
+
+image:
+  registry: ghcr.io
+  repository: wfnuser/opennof1
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+backend:
+  image:
+    repository: wfnuser/opennof1-backend
+    tag: "latest"
+  service:
+    type: ClusterIP
+    port: 8000
+    targetPort: 8000
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 250m
+      memory: 256Mi
+  env:
+    - name: PYTHONUNBUFFERED
+      value: "1"
+    - name: LOG_LEVEL
+      value: "INFO"
+  livenessProbe:
+    httpGet:
+      path: /api/v1/health
+      port: 8000
+    initialDelaySeconds: 30
+    periodSeconds: 10
+  readinessProbe:
+    httpGet:
+      path: /api/v1/health
+      port: 8000
+    initialDelaySeconds: 5
+    periodSeconds: 5
+
+frontend:
+  image:
+    repository: wfnuser/opennof1-frontend
+    tag: "latest"
+  service:
+    type: ClusterIP
+    port: 3000
+    targetPort: 3000
+  resources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  env:
+    - name: NEXT_PUBLIC_API_URL
+      value: "http://backend:8000"
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: opennof1.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+  #  - secretName: opennof1-tls
+  #    hosts:
+  #      - opennof1.local
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+# 持久化存储配置
+persistence:
+  enabled: false
+  storageClass: ""
+  accessMode: ReadWriteOnce
+  size: 1Gi
+
+# 密钥配置
+secrets:
+  # 如果为true，将使用现有的密钥
+  existingSecret: ""
+  # 否则，将创建新的密钥
+  create: true
+  # 密钥中的键值对
+  data:
+    OPENAI_API_KEY: ""
+    BINANCE_API_KEY: ""
+    BINANCE_API_SECRET: ""

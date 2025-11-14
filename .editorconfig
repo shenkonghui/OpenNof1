@@ -1,0 +1,23 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.py]
+indent_style = space
+indent_size = 4
+# 保持原有空行，不自动添加或删除空行
+
+[*.{yaml,yml}]
+indent_style = space
+indent_size = 2
+
+[*.{json,js,ts,tsx}]
+indent_style = space
+indent_size = 2
+
+[*.md]
+trim_trailing_whitespace = false
