@@ -9,6 +9,7 @@ const blockedApiPaths = [
 
 const nextConfig = {
   reactStrictMode: true,
+  output: 'standalone', // 添加standalone输出模式，用于Docker部署
   webpack: (config) => {
     config.watchOptions = {
       poll: 1000,
@@ -24,7 +25,7 @@ const nextConfig = {
     return config
   },
   async rewrites() {
-    const origin = process.env.BACKEND_ORIGIN || 'http://localhost:8000'
+    const origin = process.env.BACKEND_ORIGIN || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
     return {
       beforeFiles: blockedApiPaths.map((source) => ({
         source,
