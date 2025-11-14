@@ -39,7 +39,7 @@ RUN npm install -g pnpm
 RUN pnpm install --frozen-lockfile --prod
 
 # 复制构建产物
-COPY --from=builder /app/public ./public
+# 条件复制 public 目录（如果存在）
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 
@@ -49,9 +49,9 @@ USER nextjs
 # 暴露端口
 EXPOSE 3000
 
-# 设置环境变量
-ENV PORT 3000
-ENV HOSTNAME "0.0.0.0"
+# 设置环境变量（修复格式警告）
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
 
 # 启动命令
 CMD ["node", "server.js"]
